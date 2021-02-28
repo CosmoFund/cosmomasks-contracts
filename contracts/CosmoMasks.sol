@@ -48,7 +48,9 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
     // CosmoMasks Power address
     address private _cmpAddress;
 
-    event NameChange(uint256 indexed maskId, string newName);
+    event NameChange(uint256 indexed tokenId, string newName);
+    event startingIndexBlock(uint256 startingIndexBlock);
+    event SetStartingIndex(uint256 startingIndex);
 
 
     constructor(address cmpAddress, uint256 emissionStartTimestamp) public CosmoMasksERC721("CosmoMasks", "COSMAS") {
@@ -136,16 +138,11 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
                 _mintedBeforeReveal[mintIndex] = true;
             }
             _safeMint(msg.sender, mintIndex);
+            ICosmoTokenMint(_cosmoToken).mintToFond(1e24);
         }
 
-        ICosmoTokenMint(_cosmoToken).mintToFond(1e24);
-
-        /**
-         * Source of randomness.
-         * Theoretical miner withhold manipulation possible but should be sufficient in a pragmatic sense
-         */
-        if (startingIndexBlock == 0 && (totalSupply() == MAX_SUPPLY || block.timestamp >= REVEAL_TIMESTAMP)) {
-            startingIndexBlock = block.number;
+        if (startingIndex == 0 && (totalSupply() == MAX_SUPPLY || block.timestamp >= REVEAL_TIMESTAMP)) {
+            _setStartingIndex();
         }
     }
 
@@ -154,18 +151,20 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
      */
     function finalizeStartingIndex() public {
         require(startingIndex == 0, "CosmoMasks: starting index is already set");
-        require(startingIndexBlock != 0, "CosmoMasks: starting index block must be set");
+        require(block.timestamp >= REVEAL_TIMESTAMP, "CosmoMasks: Too early");
+        _setStartingIndex();
+    }
+
+    function _setStartingIndex() internal {
+        startingIndexBlock = block.number - 1;
+        emit SetStartingIndexBlock(startingIndexBlock);
 
         startingIndex = uint256(blockhash(startingIndexBlock)) % MAX_SUPPLY;
-        // Just a sanity case in the worst case if this function is called late (EVM only stores last 256 block hashes)
-        if (block.number.sub(startingIndexBlock) > 255) {
-            startingIndex = uint256(blockhash(block.number - 1)) % MAX_SUPPLY;
-        }
-
         // Prevent default sequence
         if (startingIndex == 0) {
             startingIndex = startingIndex.add(1);
         }
+        emit SetStartingIndex(startingIndex);
     }
 
     /**
