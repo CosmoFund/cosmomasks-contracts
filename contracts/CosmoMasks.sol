@@ -106,9 +106,9 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
         uint256 currentSupply = totalSupply();
 
         if (currentSupply >= 16381) {
-            return 100e18;
+            return 1000e18;
         } else if (currentSupply >= 16000) {
-            return 30e18;
+            return 100e18;
         } else if (currentSupply >= 15000) {
             return 17e18;
         } else if (currentSupply >= 11000) {
