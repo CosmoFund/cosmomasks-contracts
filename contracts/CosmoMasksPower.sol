@@ -82,7 +82,7 @@ contract CosmoMasksPower is Ownable, CosmoMasksPowerERC20 {
     /**
      * @dev Permissioning not added because it is only callable once. It is set right after deployment and verified.
      */
-    function setCosmoMasksAddress(address masksAddress) public {
+    function setCosmoMasksAddress(address masksAddress) public onlyOwner {
         require(cosmoMasksAddress == address(0), "CosmoMasks: CosmoMasks has already setted");
         require(masksAddress != address(0), "CosmoMasks: CosmoMasks is the zero address");
         cosmoMasksAddress = masksAddress;
