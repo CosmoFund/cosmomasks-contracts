@@ -142,7 +142,7 @@ abstract contract CosmoMasksERC721 is Context, ICosmoMasksERC721 {
         emit ApprovalForAll(_msgSender(), operator, approved);
     }
 
-    function isApprovedForAll(address owner, address operator) public view override returns (bool) {
+    function isApprovedForAll(address owner, address operator) public view virtual override returns (bool) {
         return _operatorApprovals[owner][operator];
     }
 

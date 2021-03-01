@@ -18,6 +18,12 @@ interface ICosmoMasks {
 }
 
 
+contract OwnableDelegateProxy {}
+contract ProxyRegistry {
+    mapping(address => OwnableDelegateProxy) public proxies;
+}
+
+
 // https://eips.ethereum.org/EIPS/eip-721 tokenURI
 /**
  * @title CosmoMasks contract
@@ -47,18 +53,22 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
     mapping(uint256 => bool) private _mintedBeforeReveal;
     // CosmoMasks Power address
     address private _cmpAddress;
+    address proxyRegistryAddress;
+    string private _contractURI;
 
     event NameChange(uint256 indexed tokenId, string newName);
-    event startingIndexBlock(uint256 startingIndexBlock);
+    event SetStartingIndexBlock(uint256 startingIndexBlock);
     event SetStartingIndex(uint256 startingIndex);
 
 
-    constructor(address cmpAddress, uint256 emissionStartTimestamp) public CosmoMasksERC721("CosmoMasks", "COSMAS") {
+    constructor(address cmpAddress, uint256 emissionStartTimestamp, address _proxyRegistryAddress) public CosmoMasksERC721("CosmoMasks", "COSMAS") {
         _cmpAddress = cmpAddress;
         SALE_START_TIMESTAMP = emissionStartTimestamp;
         REVEAL_TIMESTAMP = SALE_START_TIMESTAMP + (SECONDS_IN_A_DAY * 14);
+        proxyRegistryAddress = _proxyRegistryAddress;
         _setBaseURI("https://TheCosmoMasks.com/cosmomasks-metadata/");
         _setURL("https://TheCosmoMasks.com/");
+        _contractURI = "https://TheCosmoMasks.com/CosmoMasksContractMetadata.json";
     }
 
     function getCosmoToken() public view returns (address) {
@@ -73,6 +83,14 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
 
     function setBaseURI(string memory baseURI_) public onlyOwner {
         _setBaseURI(baseURI_);
+    }
+
+    function contractURI() public view returns (string memory) {
+        return _contractURI;
+    }
+
+    function setContractURI(string memory contractURI_) public onlyOwner {
+        _contractURI = contractURI_;
     }
 
     /**
@@ -144,6 +162,15 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
         if (startingIndex == 0 && (totalSupply() == MAX_SUPPLY || block.timestamp >= REVEAL_TIMESTAMP)) {
             _setStartingIndex();
         }
+    }
+
+    function isApprovedForAll(address owner, address operator) public view override returns (bool) {
+        // Whitelist OpenSea proxy contract for easy trading.
+        ProxyRegistry proxyRegistry = ProxyRegistry(proxyRegistryAddress);
+        if (address(proxyRegistry.proxies(owner)) == operator) {
+            return true;
+        }
+        return super.isApprovedForAll(owner, operator);
     }
 
     /**
