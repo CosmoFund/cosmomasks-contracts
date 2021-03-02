@@ -35,8 +35,10 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
     // This is the provenance record of all CosmoMasks artwork in existence
     uint256 public constant SECONDS_IN_A_DAY = 86400;
     uint256 public constant NAME_CHANGE_PRICE = 1830 * (10**18);
-    uint256 public constant MAX_SUPPLY = 16400;
-    string public constant COSMOMASKS_PROVENANCE = "67c9815f30768bdaa4d8f016295ebe0339326587ab9a5dc423191c5aee4ce532";
+    uint256 public constant MAX_SUPPLY = 16410;
+    string public constant PROVENANCE = "67c9815f30768bdaa4d8f016295ebe0339326587ab9a5dc423191c5aee4ce532";
+    string public PROVENANCE_EXTRA;
+    bool public provenanceExtraSetted;
     uint256 public SALE_START_TIMESTAMP;
     // Time after which CosmoMasks are randomized and allotted
     uint256 public REVEAL_TIMESTAMP;
@@ -68,29 +70,15 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
         proxyRegistryAddress = _proxyRegistryAddress;
         _setBaseURI("https://TheCosmoMasks.com/cosmomasks-metadata/");
         _setURL("https://TheCosmoMasks.com/");
-        _contractURI = "https://TheCosmoMasks.com/CosmoMasksContractMetadata.json";
+        _contractURI = "https://TheCosmoMasks.com/cosmomasks-contract-metadata.json";
     }
 
     function getCosmoToken() public view returns (address) {
         return _cosmoToken;
     }
 
-    function setCosmoToken(address token) public onlyOwner {
-        require(_cosmoToken == address(0), "CosmoMasks: CosmosToken has already setted");
-        require(token != address(0), "CosmoMasks: CosmoToken is the zero address");
-        _cosmoToken = token;
-    }
-
-    function setBaseURI(string memory baseURI_) public onlyOwner {
-        _setBaseURI(baseURI_);
-    }
-
     function contractURI() public view returns (string memory) {
         return _contractURI;
-    }
-
-    function setContractURI(string memory contractURI_) public onlyOwner {
-        _contractURI = contractURI_;
     }
 
     /**
@@ -123,7 +111,13 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
 
         uint256 currentSupply = totalSupply();
 
-        if (currentSupply >= 16381) {
+        if (currentSupply >= 16409) {
+            return 1000000e18;
+        } else if (currentSupply >= 16407) {
+            return 100000e18;
+        } else if (currentSupply >= 16400) {
+            return 10000e18;
+        } else if (currentSupply >= 16381) {
             return 1000e18;
         } else if (currentSupply >= 16000) {
             return 100e18;
@@ -281,6 +275,26 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
                 bLower[i] = bStr[i];
         }
         return string(bLower);
+    }
+
+    function setProvenanceExtra(string memory provenanceExtra) public onlyOwner {
+        require(provenanceExtraSetted == false, "CosmoMasks: provenanceExtra has already setted");
+        PROVENANCE_EXTRA = provenanceExtra;
+        provenanceExtraSetted = true;
+    }
+
+    function setCosmoToken(address token) public onlyOwner {
+        require(_cosmoToken == address(0), "CosmoMasks: CosmosToken has already setted");
+        require(token != address(0), "CosmoMasks: CosmoToken is the zero address");
+        _cosmoToken = token;
+    }
+
+    function setBaseURI(string memory baseURI_) public onlyOwner {
+        _setBaseURI(baseURI_);
+    }
+
+    function setContractURI(string memory contractURI_) public onlyOwner {
+        _contractURI = contractURI_;
     }
 
     function setURL(string memory newUrl) public onlyOwner {
