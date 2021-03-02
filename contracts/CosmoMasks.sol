@@ -36,7 +36,7 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
     uint256 public constant SECONDS_IN_A_DAY = 86400;
     uint256 public constant NAME_CHANGE_PRICE = 1830 * (10**18);
     uint256 public constant MAX_SUPPLY = 16400;
-    string public constant COSMOMASKS_PROVENANCE = "df760c771ad006eace0d705383b74158967e78c6e980b35f670249b5822c42e1";
+    string public constant COSMOMASKS_PROVENANCE = "67c9815f30768bdaa4d8f016295ebe0339326587ab9a5dc423191c5aee4ce532";
     uint256 public SALE_START_TIMESTAMP;
     // Time after which CosmoMasks are randomized and allotted
     uint256 public REVEAL_TIMESTAMP;
