@@ -179,7 +179,7 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
         startingIndexBlock = block.number - 1;
         emit SetStartingIndexBlock(startingIndexBlock);
 
-        startingIndex = uint256(blockhash(startingIndexBlock)) % MAX_SUPPLY;
+        startingIndex = uint256(blockhash(startingIndexBlock)) % 16400;
         // Prevent default sequence
         if (startingIndex == 0) {
             startingIndex = startingIndex.add(1);
