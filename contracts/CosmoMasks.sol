@@ -10,7 +10,7 @@ interface IERC20BurnTransfer {
 }
 
 interface ICosmoTokenMint {
-    function mintToFond(uint256 amount) external returns (bool);
+    function mintToFund(uint256 amount) external returns (bool);
 }
 
 interface ICosmoMasks {
@@ -36,9 +36,7 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
     uint256 public constant SECONDS_IN_A_DAY = 86400;
     uint256 public constant NAME_CHANGE_PRICE = 1830 * (10**18);
     uint256 public constant MAX_SUPPLY = 16410;
-    string public constant PROVENANCE = "67c9815f30768bdaa4d8f016295ebe0339326587ab9a5dc423191c5aee4ce532";
-    string public PROVENANCE_EXTRA;
-    bool public provenanceExtraSetted;
+    string public constant PROVENANCE = "c1c4d72a3c4fa87202de25d67710b46331426d6fe6932ba4fdcce6effb3fdefe";
     uint256 public SALE_START_TIMESTAMP;
     // Time after which CosmoMasks are randomized and allotted
     uint256 public REVEAL_TIMESTAMP;
@@ -66,7 +64,8 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
     constructor(address cmpAddress, uint256 emissionStartTimestamp, address _proxyRegistryAddress) public CosmoMasksERC721("CosmoMasks", "COSMAS") {
         _cmpAddress = cmpAddress;
         SALE_START_TIMESTAMP = emissionStartTimestamp;
-        REVEAL_TIMESTAMP = SALE_START_TIMESTAMP + (SECONDS_IN_A_DAY * 14);
+        //REVEAL_TIMESTAMP = SALE_START_TIMESTAMP + (SECONDS_IN_A_DAY * 14);
+        REVEAL_TIMESTAMP = SALE_START_TIMESTAMP + 60*60;
         proxyRegistryAddress = _proxyRegistryAddress;
         _setBaseURI("https://TheCosmoMasks.com/cosmomasks-metadata/");
         _setURL("https://TheCosmoMasks.com/");
@@ -150,7 +149,7 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
                 _mintedBeforeReveal[mintIndex] = true;
             }
             _safeMint(msg.sender, mintIndex);
-            ICosmoTokenMint(_cosmoToken).mintToFond(1e24);
+            ICosmoTokenMint(_cosmoToken).mintToFund(1e24);
         }
 
         if (startingIndex == 0 && (totalSupply() == MAX_SUPPLY || block.timestamp >= REVEAL_TIMESTAMP)) {
@@ -275,12 +274,6 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
                 bLower[i] = bStr[i];
         }
         return string(bLower);
-    }
-
-    function setProvenanceExtra(string memory provenanceExtra) public onlyOwner {
-        require(provenanceExtraSetted == false, "CosmoMasks: provenanceExtra has already setted");
-        PROVENANCE_EXTRA = provenanceExtra;
-        provenanceExtraSetted = true;
     }
 
     function setCosmoToken(address token) public onlyOwner {

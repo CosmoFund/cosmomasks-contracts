@@ -18,11 +18,11 @@ npm install @cosmofund/cosmomasks
 
 ### Usage
 ```js
-const CosmoMasks = require('@cosmofund/cosmomasks/abi/CosmoMasks.json');
-const CosmoMasksPower = require('@cosmofund/cosmomasks/abi/CosmoMasksPower.json');
+const CosmoMasks = require('@cosmofund/cosmomasks/build/CosmoMasks.json');
+const CosmoMasksPower = require('@cosmofund/cosmomasks/build/CosmoMasksPower.json');
 // or
-import CosmoMasks from '@cosmofund/cosmomasks/abi/CosmoMasks.json';
-import CosmoMasksPower from '@cosmofund/cosmomasks/abi/CosmoMasksPower.json';
+import CosmoMasks from '@cosmofund/cosmomasks/build/CosmoMasks.json';
+import CosmoMasksPower from '@cosmofund/cosmomasks/build/CosmoMasksPower.json';
 ```
 
 
