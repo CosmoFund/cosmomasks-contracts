@@ -123,9 +123,9 @@ abstract contract CosmoMasksERC721 is Context, ICosmoMasksERC721 {
     }
 
     function approve(address to, uint256 tokenId) public override {
-        address owner = CosmoMasksERC721.ownerOf(tokenId);
+        address owner = ownerOf(tokenId);
         require(to != owner, "CosmoMasks: approval to current owner");
-        require(_msgSender() == owner || CosmoMasksERC721.isApprovedForAll(owner, _msgSender()),
+        require(_msgSender() == owner || isApprovedForAll(owner, _msgSender()),
             "CosmoMasks: approve caller is not owner nor approved for all"
         );
         _approve(to, tokenId);
@@ -171,8 +171,8 @@ abstract contract CosmoMasksERC721 is Context, ICosmoMasksERC721 {
 
     function _isApprovedOrOwner(address spender, uint256 tokenId) internal view returns (bool) {
         require(_exists(tokenId), "CosmoMasks: operator query for nonexistent token");
-        address owner = CosmoMasksERC721.ownerOf(tokenId);
-        return (spender == owner || getApproved(tokenId) == spender || CosmoMasksERC721.isApprovedForAll(owner, spender));
+        address owner = ownerOf(tokenId);
+        return (spender == owner || getApproved(tokenId) == spender || isApprovedForAll(owner, spender));
     }
 
     function _safeMint(address to, uint256 tokenId) internal {
@@ -193,7 +193,7 @@ abstract contract CosmoMasksERC721 is Context, ICosmoMasksERC721 {
     }
 
     function _burn(uint256 tokenId) internal {
-        address owner = CosmoMasksERC721.ownerOf(tokenId);
+        address owner = ownerOf(tokenId);
         _approve(address(0), tokenId);
         _holderTokens[owner].remove(tokenId);
         _tokenOwners.remove(tokenId);
@@ -201,7 +201,7 @@ abstract contract CosmoMasksERC721 is Context, ICosmoMasksERC721 {
     }
 
     function _transfer(address from, address to, uint256 tokenId) internal {
-        require(CosmoMasksERC721.ownerOf(tokenId) == from, "CosmoMasks: transfer of token that is not own");
+        require(ownerOf(tokenId) == from, "CosmoMasks: transfer of token that is not own");
         require(to != address(0), "CosmoMasks: transfer to the zero address");
         _approve(address(0), tokenId);
         _holderTokens[from].remove(tokenId);
@@ -231,7 +231,7 @@ abstract contract CosmoMasksERC721 is Context, ICosmoMasksERC721 {
 
     function _approve(address to, uint256 tokenId) private {
         _tokenApprovals[tokenId] = to;
-        emit Approval(CosmoMasksERC721.ownerOf(tokenId), to, tokenId);
+        emit Approval(ownerOf(tokenId), to, tokenId);
     }
 
     function _setURL(string memory newUrl) internal {
