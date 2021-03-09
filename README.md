@@ -4,8 +4,8 @@ CosmoMasks WEB Site: [www.TheCosmoMasks.com](https://www.TheCosmoMasks.com/).
 
 
 ## Verified Smart Contracts:
-- [CosmoMasks](https://etherscan.io/token/0x4AabD793739723dab369CB14aD1A70E3d19bd207);
-- [CosmoMasks Power](https://etherscan.io/token/0x884f38AAC3eEA8bcfeAed47810F70a1e5967d72a).
+- [CosmoMasks](https://etherscan.io/token/0x0580Ae26963230BFBd2A775ff0AFA937Fd157774);
+- [CosmoMasks Power](https://etherscan.io/token/0xB9FDc13F7f747bAEdCc356e9Da13Ab883fFa719B).
 
 
 ## Usage CosmoMasks Smart Contracts
