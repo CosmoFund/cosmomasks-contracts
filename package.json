@@ -9,7 +9,7 @@
     "url": "https://www.CosmoFund.space"
   },
   "scripts": {
-    "clean": "rimraf ./abi/",
+    "clean": "rimraf ./build/",
     "precompile": "yarn clean",
     "compile": "truffle compile"
   },
