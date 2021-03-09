@@ -34,12 +34,12 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
 
     // This is the provenance record of all CosmoMasks artwork in existence
     uint256 public constant SECONDS_IN_A_DAY = 86400;
-    uint256 public constant NAME_CHANGE_PRICE = 1830 * (10**18);
+    uint256 public constant NAME_CHANGE_PRICE = 1830e18;
     uint256 public constant MAX_SUPPLY = 16410;
-    string public constant PROVENANCE = "c1c4d72a3c4fa87202de25d67710b46331426d6fe6932ba4fdcce6effb3fdefe";
-    uint256 public SALE_START_TIMESTAMP;
+    string  public constant PROVENANCE = "c1c4d72a3c4fa87202de25d67710b46331426d6fe6932ba4fdcce6effb3fdefe";
+    uint256 public constant SALE_START_TIMESTAMP = 1615734000; // "2021-03-14T15:00:00.000Z"
     // Time after which CosmoMasks are randomized and allotted
-    uint256 public REVEAL_TIMESTAMP;
+    uint256 public constant REVEAL_TIMESTAMP = 1616943600; // "2021-03-28T15:00:00.000Z"
 
     uint256 public startingIndexBlock;
     uint256 public startingIndex;
@@ -61,11 +61,8 @@ contract CosmoMasks is Ownable, CosmoMasksERC721, ICosmoMasks {
     event SetStartingIndex(uint256 startingIndex);
 
 
-    constructor(address cmpAddress, uint256 emissionStartTimestamp, address _proxyRegistryAddress) public CosmoMasksERC721("CosmoMasks", "COSMAS") {
+    constructor(address cmpAddress, address _proxyRegistryAddress) public CosmoMasksERC721("CosmoMasks", "COSMAS") {
         _cmpAddress = cmpAddress;
-        SALE_START_TIMESTAMP = emissionStartTimestamp;
-        //REVEAL_TIMESTAMP = SALE_START_TIMESTAMP + (SECONDS_IN_A_DAY * 14);
-        REVEAL_TIMESTAMP = SALE_START_TIMESTAMP + 60*60;
         proxyRegistryAddress = _proxyRegistryAddress;
         _setBaseURI("https://TheCosmoMasks.com/cosmomasks-metadata/");
         _setURL("https://TheCosmoMasks.com/");

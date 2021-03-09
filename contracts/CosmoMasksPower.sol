@@ -24,16 +24,13 @@ contract CosmoMasksPower is Ownable, CosmoMasksPowerERC20 {
     uint256 public constant INITIAL_ALLOTMENT = 1830e18;
     uint256 public constant PRE_REVEAL_MULTIPLIER = 2;
 
-    // Public variables
-    uint256 public emissionStart;
-    uint256 public emissionEnd;
-    uint256 public emissionPerDay = 10e18;
+    uint256 public constant emissionStart = 1615734000; // "2021-03-14T15:00:00.000Z"
+    uint256 public constant emissionEnd = 1931094000; // "2031-03-12T15:00:00.000Z" // emissionStartTimestamp + (SECONDS_IN_A_DAY * 365 * 10)
+    uint256 public constant emissionPerDay = 10e18;
     mapping(uint256 => uint256) private _lastClaim;
 
 
-    constructor(uint256 emissionStartTimestamp) public CosmoMasksPowerERC20("CosmoMasks Power", "CMP") {
-        emissionStart = emissionStartTimestamp;
-        emissionEnd = emissionStartTimestamp + (SECONDS_IN_A_DAY * 365 * 10);
+    constructor() public CosmoMasksPowerERC20("CosmoMasks Power", "CMP") {
         _setURL("https://TheCosmoMasks.com/");
     }
 
